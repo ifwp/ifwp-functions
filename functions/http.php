@@ -2,6 +2,34 @@
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('_ifwp_use_remote_request')){
+    function _ifwp_use_remote_request(){
+        static $already_called = false;
+        if(!$already_called){
+            $already_called = true;
+            if(!class_exists('\IFWP_Remote_Request')){
+                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'classes/remote-request.php');
+            }
+        }
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('_ifwp_use_remote_response')){
+    function _ifwp_use_remote_response(){
+        static $already_called = false;
+        if(!$already_called){
+            $already_called = true;
+            if(!class_exists('\IFWP_Remote_Response')){
+                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'classes/remote-response.php');
+            }
+        }
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('ifwp_is_successful')){
     function ifwp_is_successful($code = 0){
         return ($code >= 200 and $code < 300);
@@ -160,7 +188,7 @@ if(!function_exists('ifwp_remote_put')){
 
 if(!function_exists('ifwp_remote_request')){
     function ifwp_remote_request($url = '', $args = []){
-        ifwp_use_remote_request();
+        _ifwp_use_remote_request();
         return new IFWP_Remote_Request($url, $args);
     }
 }
@@ -169,7 +197,7 @@ if(!function_exists('ifwp_remote_request')){
 
 if(!function_exists('ifwp_remote_response')){
     function ifwp_remote_response($response = null){
-        ifwp_use_remote_response();
+        _ifwp_use_remote_response();
         $code = 500;
         $data = null;
         $message = '';
@@ -270,34 +298,6 @@ if(!function_exists('ifwp_support_authorization_header')){
             add_filter('mod_rewrite_rules', function($rules){
                 return str_replace("RewriteEngine On\n", "RewriteEngine On\nRewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]\n", $rules);
             });
-        }
-    }
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-if(!function_exists('ifwp_use_remote_request')){
-    function ifwp_use_remote_request(){
-        static $already_called = false;
-        if(!$already_called){
-            $already_called = true;
-            if(!class_exists('\IFWP_Remote_Request')){
-                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'classes/remote-request.php');
-            }
-        }
-    }
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-if(!function_exists('ifwp_use_remote_response')){
-    function ifwp_use_remote_response(){
-        static $already_called = false;
-        if(!$already_called){
-            $already_called = true;
-            if(!class_exists('\IFWP_Remote_Response')){
-                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'classes/remote-response.php');
-            }
         }
     }
 }
