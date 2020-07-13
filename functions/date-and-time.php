@@ -39,8 +39,8 @@ if(!function_exists('ifwp_is_mysql_date')){
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if(!function_exists('ifwp_offset_or_tz')){
-    function ifwp_offset_or_tz($offset_or_tz = ''){
-        if(is_numeric($offset_or_tz)){ // Default GMT offset or timezone string. Must be either a valid offset (-12 to 14) or a valid timezone string.
+    function ifwp_offset_or_tz($offset_or_tz = ''){ // Default GMT offset or timezone string. Must be either a valid offset (-12 to 14) or a valid timezone string.
+        if(is_numeric($offset_or_tz)){
             return [
                 'gmt_offset' => $offset_or_tz,
                 'timezone_string' => '',
