@@ -17,8 +17,14 @@ if(!defined('ABSPATH')){
     die("Hi there! I'm just a plugin, not much I can do when called directly.");
 }
 
+define('IFWP_FUNCTIONS', __FILE__);
+
 add_action('wp_enqueue_scripts', function(){
-    $src = plugin_dir_url(__FILE__) . 'js/ifwp-functions.js';
-    $ver = filemtime($src);
+    $src = plugin_dir_url(IFWP_FUNCTIONS) . 'functions.js';
+    $ver = filemtime(plugin_dir_path(IFWP_FUNCTIONS) . 'functions.js');
     wp_enqueue_script('ifwp-functions', $src, ['jquery'], $ver, true);
 });
+
+foreach(glob(plugin_dir_path(IFWP_FUNCTIONS) . '*.php') as $functions){
+    require_once($functions);
+}
