@@ -1,7 +1,4 @@
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-// IFWP Functions
-//
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if(typeof ifwp_add_query_arg !== 'function'){
@@ -104,6 +101,44 @@ if(typeof ifwp_add_query_args !== 'function'){
         }
         return href;
     };
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(typeof ifwp_page_visibility_event !== 'function'){
+    function ifwp_page_visibility_event(){
+        'use strict';
+        var visibilityChange = '';
+        if(typeof document.hidden !== 'undefined'){ // Opera 12.10 and Firefox 18 and later support
+            visibilityChange = 'visibilitychange';
+        } else if(typeof document.webkitHidden !== 'undefined'){
+            visibilityChange = 'webkitvisibilitychange';
+        } else if(typeof document.msHidden !== 'undefined'){
+            visibilityChange = 'msvisibilitychange';
+        } else if(typeof document.mozHidden !== 'undefined'){ // Deprecated
+            visibilityChange = 'mozvisibilitychange';
+        }
+        return visibilityChange;
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(typeof ifwp_page_visibility_state !== 'function'){
+    function ifwp_page_visibility_state(){
+        'use strict';
+        var hidden = '';
+        if(typeof document.hidden !== 'undefined'){ // Opera 12.10 and Firefox 18 and later support
+            hidden = 'hidden';
+        } else if(typeof document.webkitHidden !== 'undefined'){
+            hidden = 'webkitHidden';
+        } else if(typeof document.msHidden !== 'undefined'){
+            hidden = 'msHidden';
+        } else if(typeof document.mozHidden !== 'undefined'){ // Deprecated
+            hidden = 'mozHidden';
+        }
+        return document[hidden];
+    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
