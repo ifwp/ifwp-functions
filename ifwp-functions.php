@@ -10,7 +10,7 @@ Network:
 Plugin Name: IFWP Functions
 Plugin URI: https://github.com/ifwp/ifwp-functions
 Text Domain: ifwp-functions
-Version: 2020.7.15.3
+Version: 2020.7.15.4
 */
 
 if(!defined('ABSPATH')){
@@ -23,7 +23,7 @@ add_action('wp_enqueue_scripts', function(){
     wp_enqueue_script('ifwp-functions', $src, ['jquery'], $ver, true);
 });
 require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'functions.php');
-foreach(glob(plugin_dir_path(IFWP_FUNCTIONS) . '*.php') as $functions){
+foreach(glob(plugin_dir_path(IFWP_FUNCTIONS) . 'functions/*.php') as $functions){
     require_once($functions);
 }
 ifwp_build_update_checker('https://github.com/ifwp/ifwp-functions', IFWP_FUNCTIONS, 'ifwp-functions');
