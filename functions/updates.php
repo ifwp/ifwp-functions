@@ -8,7 +8,7 @@ if(!function_exists('_ifwp_include_puc')){
         if(!$already_called){
             $already_called = true;
             if(!class_exists('\Puc_v4_Factory')){
-                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'includes/plugin-update-checker-4.9/vendor/autoload.php');
+                require_once(plugin_dir_path(IFWP_FUNCTIONS) . 'includes/plugin-update-checker-4.9/plugin-update-checker.php');
             }
         }
     }
