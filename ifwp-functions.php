@@ -2,7 +2,7 @@
 /*
 Author: Improvements and Fixes for WordPress
 Author URI: https://github.com/ifwp
-Description: A collection of useful functions for your WordPress theme's functions.php
+Description: A collection of useful functions for your WordPress theme's functions.php.
 Domain Path:
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -10,7 +10,7 @@ Network:
 Plugin Name: IFWP Functions
 Plugin URI: https://github.com/ifwp/ifwp-functions
 Text Domain: ifwp-functions
-Version: 2020.7.15.5
+Version: 0.7.15.6
 */
 
 if(!defined('ABSPATH')){
