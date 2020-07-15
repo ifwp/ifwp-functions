@@ -30,6 +30,14 @@ if(!function_exists('_ifwp_use_remote_response')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('ifwp_is_cloudflare')){
+    function ifwp_is_cloudflare(){
+        return !empty($_SERVER['HTTP_CF_RAY']);
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('ifwp_is_successful')){
     function ifwp_is_successful($code = 0){
         return ($code >= 200 and $code < 300);
@@ -75,6 +83,11 @@ if(!function_exists('ifwp_remote_download')){
             'filename' => $file,
             'timeout' => $timeout,
         ]);
+        if(ifwp_is_cloudflare()){
+            if(!$args['timeout'] or $args['timeout'] > 90){
+                $args['timeout'] = 90; // Prevents Error 524: https://support.cloudflare.com/hc/en-us/articles/115003011431#524error
+            }
+        }
         if(strpos($args['filename'], $wp_upload_dir['basedir']) !== 0){
             return new WP_Error('ifwp_remote_download_invalid_filename', 'Invalid filename.');
         }
@@ -242,7 +255,7 @@ if(!function_exists('ifwp_remote_response')){
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if(!function_exists('ifwp_remote_response_error')){
-    function ifwp_remote_response_error($data = '', $code = 500, $message = ''){
+    function ifwp_remote_response_error($message = '', $code = 500, $data = ''){
         if(!$message){
             $message = get_status_header_desc($code);
         }

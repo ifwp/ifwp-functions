@@ -117,8 +117,8 @@ if(!function_exists('ifwp_seems_json')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if(!function_exists('ifwp_signon')){
-	function ifwp_signon($user_login = '', $remember = false){
+if(!function_exists('ifwp_signon_without_password')){
+	function ifwp_signon_without_password($user_login = '', $remember = false){
         if(is_user_logged_in()){
             return new WP_Error('authentication_failed', 'You are currently logged in.');
         }
