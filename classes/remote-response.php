@@ -6,16 +6,15 @@ if(!class_exists('IFWP_Remote_Response')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public function __construct($response = [], $raw_response = null){
-            if(ifwp_seems_response($response)){
+            if(ifwp_seems_remote_response($response)){
                 $this->from_array($response);
                 $this->raw_data = $this->data;
-                $this->raw_response = $raw_response;
                 $this->maybe_json_decode();
-                $this->maybe_merge();
+                $this->maybe_unserialize();
             } else {
                 $this->message = __('Invalid object type.');
-                $this->raw_response = is_null($raw_response) ? $response : $raw_response;
             }
+            $this->raw_response = is_null($raw_response) ? $response : $raw_response;
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,6 +27,22 @@ if(!class_exists('IFWP_Remote_Response')){
 
         public function data(){
             return $this->data;
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        public function is_successful(){ // Alias of success()
+            return $this->success;
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        public function rest_ensure_response(){
+            if($this->success){
+                return $this->to_wp_rest_response();
+            } else {
+                return $this->to_wp_error();
+            }
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,31 +71,34 @@ if(!class_exists('IFWP_Remote_Response')){
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        public function to_array(){
-            return [
-                'code' => $this->code,
-                'data' => $this->data,
-                'message' => $this->message,
-                'success' => $this->success,
-            ];
+        public function to_wp_error(){
+            return new WP_Error('ifwp_remote_response_error', $this->message, [
+                'status' => $this->code,
+            ]);
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        private $code = 500, $data = null, $message = '', $raw_data = null, $raw_response = null, $success = false;
+        public function to_wp_rest_response(){
+            $response = new WP_REST_Response($this->data);
+            $response->set_status($this->code);
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        private $code = 500, $data = '', $message = '', $raw_data = '', $raw_response = null, $success = false;
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         private function from_array($response = []){
-            $this->code = $response['code'];
+            $this->code = intval($response['code']);
             $this->data = $response['data'];
-            $this->message = $response['message'];
-            $this->success = $response['success'];
-            if(!$this->message){
-                $this->message = ($this->success ? 'OK' : __('Something went wrong.'));
-            }
-            if($this->success !== ifwp_is_successful($this->code)){
-                $this->code = ($this->success ? 200 : 500);
+            $this->message = strval($response['message']);
+            $this->success = boolval($response['success']);
+            if(!$this->code or !$this->message or $this->success !== ifwp_is_successful($this->code)){
+                $this->code = 500;
+                $this->message = __('Something went wrong.');
+                $this->success = false;
             }
         }
 
@@ -99,10 +117,8 @@ if(!class_exists('IFWP_Remote_Response')){
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        private function maybe_merge(){
-            if(ifwp_seems_remote_response($this->data)){
-                $this->from_array($this->data);
-            }
+        private function maybe_unserialize(){
+            $this->data = maybe_unserialize($this->data);
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

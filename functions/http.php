@@ -199,7 +199,7 @@ if(!function_exists('ifwp_remote_response')){
     function ifwp_remote_response($response = null){
         _ifwp_use_remote_response();
         $code = 500;
-        $data = null;
+        $data = '';
         $message = '';
         $success = false;
         switch(true){
