@@ -10,7 +10,7 @@ Network:
 Plugin Name: IFWP Functions
 Plugin URI: https://github.com/ifwp/ifwp-functions
 Text Domain: ifwp-functions
-Version: 0.7.21.2
+Version: 0.7.21.3
 */
 
 if(!defined('ABSPATH')){

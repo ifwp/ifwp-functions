@@ -82,6 +82,7 @@ if(!class_exists('IFWP_Remote_Response')){
         public function to_wp_rest_response(){
             $response = new WP_REST_Response($this->data);
             $response->set_status($this->code);
+            return $response;
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
