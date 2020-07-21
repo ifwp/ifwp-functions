@@ -66,10 +66,12 @@ if(!class_exists('IFWP_Remote_Request')){
 
         private function request($method = '', $body = []){
             $this->args['method'] = $method;
-            if(isset($this->args['body'])){
-                $this->args['body'] = wp_parse_args($body, $this->args['body']);
-            } else {
-                $this->args['body'] = $body;
+            if(!empty($body)){
+                if(!empty($this->args['body'])){
+                    $this->args['body'] = wp_parse_args($body, $this->args['body']);
+                } else {
+                    $this->args['body'] = $body;
+                }
             }
             $response = wp_remote_request($this->url, $this->args);
             return ifwp_remote_response($response);

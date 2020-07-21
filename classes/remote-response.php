@@ -106,7 +106,7 @@ if(!class_exists('IFWP_Remote_Response')){
 
         private function maybe_json_decode(){
             if(ifwp_seems_json($this->data)){
-                $this->data = json_decode($this->data);
+                $this->data = json_decode($this->data, true);
                 if(json_last_error() !== JSON_ERROR_NONE){
                     $this->code = 500;
                     $this->message = json_last_error_msg();

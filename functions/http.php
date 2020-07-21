@@ -48,8 +48,8 @@ if(!function_exists('ifwp_is_successful')){
 
 if(!function_exists('ifwp_remote_delete')){
     function ifwp_remote_delete($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->delete($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->delete();
     }
 }
 
@@ -147,8 +147,8 @@ if(!function_exists('ifwp_remote_download')){
 
 if(!function_exists('ifwp_remote_get')){
     function ifwp_remote_get($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->get($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->get();
     }
 }
 
@@ -156,8 +156,8 @@ if(!function_exists('ifwp_remote_get')){
 
 if(!function_exists('ifwp_remote_head')){
     function ifwp_remote_head($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->head($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->head();
     }
 }
 
@@ -165,8 +165,8 @@ if(!function_exists('ifwp_remote_head')){
 
 if(!function_exists('ifwp_remote_options')){
     function ifwp_remote_options($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->options($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->options();
     }
 }
 
@@ -174,8 +174,8 @@ if(!function_exists('ifwp_remote_options')){
 
 if(!function_exists('ifwp_remote_patch')){
     function ifwp_remote_patch($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->patch($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->patch();
     }
 }
 
@@ -183,8 +183,8 @@ if(!function_exists('ifwp_remote_patch')){
 
 if(!function_exists('ifwp_remote_post')){
     function ifwp_remote_post($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->post($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->post();
     }
 }
 
@@ -192,8 +192,8 @@ if(!function_exists('ifwp_remote_post')){
 
 if(!function_exists('ifwp_remote_put')){
     function ifwp_remote_put($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->put($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->put();
     }
 }
 
@@ -280,8 +280,8 @@ if(!function_exists('ifwp_remote_response_success')){
 
 if(!function_exists('ifwp_remote_trace')){
     function ifwp_remote_trace($url, $args = []){
-        $remote_request = ifwp_remote_request($url);
-        return $remote_request->trace($args);
+        $remote_request = ifwp_remote_request($url, $args);
+        return $remote_request->trace();
     }
 }
 
