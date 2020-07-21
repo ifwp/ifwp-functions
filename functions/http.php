@@ -297,7 +297,7 @@ if(!function_exists('ifwp_seems_remote_response')){
 
 if(!function_exists('ifwp_seems_wp_http_requests_response')){
     function ifwp_seems_wp_http_requests_response($response = []){
-        return (is_array($response) and isset($response['headers'], $response['body'], $response['response'], $response['cookies'], $response['filename'], $response['http_response']) and is_a($response['http_response'], 'WP_HTTP_Requests_Response'));
+        return (is_array($response) and array_key_exists('headers', $response) and array_key_exists('body', $response) and array_key_exists('response', $response) and array_key_exists('cookies', $response) and array_key_exists('filename', $response) and array_key_exists('http_response', $response) and is_a($response['http_response'], 'WP_HTTP_Requests_Response'));
     }
 }
 
