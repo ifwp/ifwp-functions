@@ -2,6 +2,57 @@
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('ifwp_attachment_url_to_postid')){
+	function ifwp_attachment_url_to_postid($url = ''){
+		if($url){
+			/** original */
+			$post_id = ifwp_guid_to_postid($url);
+			if($post_id){
+				return $post_id;
+			}
+            /** resized */
+			preg_match('/^(.+)(-\d+x\d+)(\.' . substr($url, strrpos($url, '.') + 1) . ')?$/', $url, $matches);
+			if($matches){
+				$url = $matches[1];
+				if(isset($matches[3])){
+					$url .= $matches[3];
+				}
+                $post_id = ifwp_guid_to_postid($url);
+				if($post_id){
+					return $post_id;
+				}
+			}
+			/** scaled */
+			preg_match('/^(.+)(-scaled)(\.' . substr($url, strrpos($url, '.') + 1) . ')?$/', $url, $matches);
+			if($matches){
+				$url = $matches[1];
+				if(isset($matches[3])){
+					$url .= $matches[3];
+				}
+                $post_id = ifwp_guid_to_postid($url);
+				if($post_id){
+					return $post_id;
+				}
+			}
+			/** edited */
+			preg_match('/^(.+)(-e\d+)(\.' . substr($url, strrpos($url, '.') + 1) . ')?$/', $url, $matches);
+			if($matches){
+				$url = $matches[1];
+				if(isset($matches[3])){
+					$url .= $matches[3];
+				}
+                $post_id = ifwp_guid_to_postid($url);
+				if($post_id){
+					return $post_id;
+				}
+			}
+		}
+		return 0;
+	}
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('ifwp_byte_value')){
     function ifwp_byte_value($value = ''){
     	if(is_numeric($value)){
@@ -29,6 +80,23 @@ if(!function_exists('ifwp_byte_value')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('ifwp_guid_to_postid')){
+	function ifwp_guid_to_postid($guid = ''){
+        global $wpdb;
+		if($guid){
+			$str = "SELECT ID FROM $wpdb->posts WHERE guid = %s";
+			$sql = $wpdb->prepare($str, $guid);
+			$post_id = $wpdb->get_var($sql);
+			if($post_id){
+				return (int) $post_id;
+			}
+		}
+		return 0;
+	}
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('ifwp_is_extension_allowed')){
 	function ifwp_is_extension_allowed($extension = ''){
         if(!$extension){
@@ -40,6 +108,18 @@ if(!function_exists('ifwp_is_extension_allowed')){
             }
         }
         return false;
+	}
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('ifwp_maybe_require_media_functions')){
+	function ifwp_maybe_require_media_functions(){
+		if(!is_admin()){
+			require_once(ABSPATH . 'wp-admin/includes/file.php');
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			require_once(ABSPATH . 'wp-admin/includes/media.php');
+		}
 	}
 }
 
@@ -61,6 +141,34 @@ if(!function_exists('ifwp_read_file_chunk')){
     		}
     	}
         return $giant_chunk;
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('ifwp_remove_filename_accents')){
+	function ifwp_remove_filename_accents(){
+        ifwp_on('sanitize_file_name', 'remove_accents');
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('ifwp_solve_filetype_conflicts')){
+	function ifwp_solve_filetype_conflicts(){
+        ifwp_on('wp_check_filetype_and_ext', function($wp_check_filetype_and_ext, $file, $filename, $mimes, $real_mime){
+    		if($wp_check_filetype_and_ext['ext'] and $wp_check_filetype_and_ext['type']){
+    			return $wp_check_filetype_and_ext;
+    		}
+    		if(strpos($real_mime, 'audio/') === 0 or strpos($real_mime, 'video/') === 0){
+    			$filetype = wp_check_filetype($filename);
+    			if(in_array(substr($filetype['type'], 0, strcspn($filetype['type'], '/')), ['audio', 'video'])){
+    				$wp_check_filetype_and_ext['ext'] = $filetype['ext'];
+    				$wp_check_filetype_and_ext['type'] = $filetype['type'];
+    			}
+    		}
+    		return $wp_check_filetype_and_ext;
+    	}, 10, 5);
     }
 }
 
