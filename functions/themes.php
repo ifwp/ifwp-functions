@@ -45,6 +45,7 @@ if(!function_exists('ifwp_enqueue_bs_custom_file_input')){
             add_action('wp_enqueue_scripts', function(){
                 $src = plugin_dir_url(IFWP_FUNCTIONS) . 'assets/js/bs-custom-file-input.min.js';
                 wp_enqueue_script('bs-custom-file-input', $src, ['jquery'], '1.3.4', true);
+				wp_add_inline_script('bs-custom-file-input', 'jQuery(function($){ bsCustomFileInput.init(); });');
             });
         }
     }
