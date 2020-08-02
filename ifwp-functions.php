@@ -10,7 +10,7 @@ Network:
 Plugin Name: IFWP Functions
 Plugin URI: https://github.com/ifwp/ifwp-functions
 Text Domain: ifwp-functions
-Version: 0.8.1.3
+Version: 0.8.2
 */
 
 if(!defined('ABSPATH')){
@@ -19,7 +19,21 @@ if(!defined('ABSPATH')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-define('IFWP_FUNCTIONS', __FILE__);
+if(defined('IFWP_FUNCTIONS')){
+    wp_die('IFWP Functions already exists.');
+} else {
+    define('IFWP_FUNCTIONS', __FILE__);
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+foreach(glob(plugin_dir_path(IFWP_FUNCTIONS) . 'functions/*.php') as $functions){
+    require_once($functions);
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ifwp_build_update_checker('https://github.com/ifwp/ifwp-functions', IFWP_FUNCTIONS, 'ifwp-functions');
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -31,10 +45,9 @@ add_action('wp_enqueue_scripts', function(){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-foreach(glob(plugin_dir_path(IFWP_FUNCTIONS) . 'functions/*.php') as $functions){
-    require_once($functions);
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ifwp_build_update_checker('https://github.com/ifwp/ifwp-functions', IFWP_FUNCTIONS, 'ifwp-functions');
+add_action('after_setup_theme', function(){
+    $src = get_stylesheet_directory() . '/ifwp-functions.php';
+    if(file_exists($src)){
+        require_once($src);
+    }
+});
